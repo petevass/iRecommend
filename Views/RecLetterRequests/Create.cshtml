@@ -1,0 +1,90 @@
+@model iRecommendWeb.Models.RecLetterRequest
+
+@{
+    ViewData["Title"] = "Create";
+
+    bool locked = ViewData["disabled"] as bool? ?? false;
+    var poolIdValue = ViewData["poolId"] ?? Model?.poolId;
+}
+
+<style>
+    .form-control[readonly] {
+        background-color: var(--bs-secondary-bg, #e9ecef);
+        color: var(--bs-secondary-color, #6c757d);
+        cursor: not-allowed;
+        opacity: 1;
+    }
+
+    .form-control[readonly]:focus {
+        box-shadow: none;
+        border-color: var(--bs-border-color, #dee2e6);
+    }
+</style>
+
+<h1>Create</h1>
+
+<h4>Request a Recommendation Letter</h4>
+<hr />
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div id="document-display-grid">
+
+        <div class="custom-card">
+            <label asp-for="poolId" class="control-label">Recommendation Letter Pool ID</label>
+            <input asp-for="poolId" readonly="@locked" value="@poolIdValue" class="form-control" />
+            <span asp-validation-for="poolId" class="text-danger"></span>
+        </div>
+
+        <div class="custom-card">
+            <h6>College Name:</h6>
+            <input asp-for="college" class="form-control" />
+            <span asp-validation-for="college" class="text-danger"></span>
+            <br />
+            <h6>Submission Method:</h6>
+            <select asp-for="method" class="form-control"
+                    asp-items="Html.GetEnumSelectList<SubmitMethod>()"></select>
+            <span asp-validation-for="method" class="text-danger"></span>
+        </div>
+
+        <div class="custom-card">
+            <h6>Submission Deadline:</h6>
+            <input asp-for="deadline" type="datetime-local" class="form-control" />
+            <span asp-validation-for="deadline" class="text-danger"></span>
+        </div>
+
+        <div class="custom-card span-3">
+            <h5>Details for Your Teacher</h5>
+            <textarea asp-for="details" id="autoresizing"
+                      style="width:97%; box-sizing:border-box; resize:none; overflow-y:hidden"></textarea>
+            <span asp-validation-for="details" class="text-danger"></span>
+        </div>
+
+    </div>
+    <br />
+    <input type="submit" value="Create" class="btn btn-primary" />
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const textarea = document.getElementById('autoresizing');
+        if (!textarea) return;
+
+        function autoResize() {
+            textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight + 'px';
+        }
+
+        textarea.addEventListener('input', autoResize);
+        autoResize();
+    });
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

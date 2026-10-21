@@ -1,0 +1,68 @@
+@model iRecommendWeb.Models.RecLetterPoolDisplay;
+
+@{
+    ViewData["Title"] = "Details";
+    var url = $"{Context.Request.Scheme}://{Context.Request.Host}/RecLetterRequests/Create/{Model.poolId}";
+}
+
+
+
+
+
+<div>
+    <h2>@Model.poolName</h2>
+    <hr />
+    
+        <dt class = "col-sm-2">
+            Letter Pool Closing Date
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.closingDate)
+        </dd>
+    </dl>
+
+</dl>
+<dt class="col-sm-2">
+    Letter Pool Share Link (Give to Students)
+</dt>
+<dd class="col-sm-10">
+    <a href="@url">@url</a>
+    <br/>
+    <br/>
+    <button  class="btn btn-primary" onclick="copyTextContent()">Copy</button>
+</dd>
+
+</dl>
+
+        <dt class = "col-sm-2">
+            Recommendation Letter Requests: 
+        </dt>
+        <dd id="document-display-grid">
+       @foreach (ReqLetterRequestDisplay item in Model.requests)
+        {
+            
+        <div class="document-card">
+            <a asp-controller="RecLetterRequests" asp-action="Details" asp-route-letterid="@item.letterId" class="stretched-link"></a>
+            <span>@item.studentName for @item.college</span>
+            <div class="card-actions">
+                
+            </div>
+        </div>
+        
+        }
+    </dd>
+    </dl>
+</div>
+<div>
+    
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<script>
+    function copyTextContent() {
+        
+        var copyText = "@url";
+
+        navigator.clipboard.writeText(copyText);
+    }
+</script>

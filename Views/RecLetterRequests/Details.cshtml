@@ -1,0 +1,88 @@
+@model iRecommendWeb.Models.ReqLetterRequestDisplay
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h4>@Model.studentName's Letter</h4>
+<div id="document-display-grid">
+
+    <div class="custom-card">
+        <h6>College Name:</h6>
+        <p>@Model.college</p>
+        <h6>Submission Method:</h6>
+        <p>@Model.method</p>
+    </div>
+
+    <div class="custom-card">
+        <h6>Submission Deadline:</h6>
+        <p>@Model.deadline</p>
+
+        @if (User.IsInRole(Roles.Teacher))
+        {
+            <h6>Enter Your Current Progress</h6>
+            <select class="form-control" name="currentProgress" id="levelSelect"
+                    asp-items="Html.GetEnumSelectList<ProgressLevel>()"
+                    asp-for="currentProgress">
+            </select>
+        }
+        else
+        {
+            <h6>Teacher's Current Progress</h6>
+            <p>@Model.currentProgress</p>
+        }
+    </div>
+
+    <div class="custom-card" style="visibility:hidden;"></div>
+
+    <div class="custom-card span-2">
+        <h5>Details from the Student</h5>
+        <p style="white-space: pre-wrap;">@Model.details</p>
+    </div>
+
+</div>
+
+<div>
+    @if (User.IsInRole(Roles.Student))
+    {
+        <a asp-action="Edit" asp-route-letterid="@Model.letterId">Edit</a>
+        <text> | </text>
+        <a asp-action="Delete" asp-route-letterid="@Model.letterId">Delete</a>
+        <text> | </text>
+        <a asp-action="Index">Back to List</a>
+    }
+    else
+    {
+        <a asp-action="Details" asp-controller="RecLetterRequestPools"
+           asp-route-poolid="@Model.poolId">Back to List</a>
+    }
+</div>
+
+@if (User.IsInRole(Roles.Teacher))
+{
+
+    <script>
+        let selector = document.getElementById("levelSelect");
+        selector.addEventListener('change', async ()=>{
+
+            const res = await fetch("/RecLetterRequests/update-status/@Model.letterId",{
+
+                method:"POST",
+                headers:{
+
+                            "Content-Type":"application/json"
+
+                        },
+                body:JSON.stringify(parseInt(selector.value)),
+
+            });
+
+            if (!res.ok) {
+                console.error("Status update failed:", res.status);
+            }
+
+        });
+
+    </script>
+
+}

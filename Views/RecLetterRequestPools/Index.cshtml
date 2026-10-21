@@ -1,0 +1,104 @@
+@model IEnumerable<iRecommendWeb.Models.RecLetterRequestPool>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<style>
+
+    #document-display-grid {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: auto;
+        gap: 1.5rem;
+        padding: 1rem 0;
+    }
+
+    .document-card {
+        position:relative;
+        background-color: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: #1a202c;
+        transition: transform 0.2s, box-shadow 0.2s;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        
+    }
+
+        .document-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+    .custom-card {
+        background-color: #0076ff;
+        color: white;
+        padding: 0.75rem 1rem;
+        border-radius: 6px;
+        text-align: center;
+        cursor: pointer;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        display: inline-block;
+    }
+
+        .custom-card:hover {
+            background-color: #0056b3;
+        }
+
+    .card-actions {
+        display: flex;
+        gap: 1rem;
+        z-index:2;
+    }
+
+    .delete-btn {
+        color: red;
+        text-decoration: underline;
+        cursor: pointer;
+        font-size: 0.9rem;
+        background: none;
+        border: none;
+        padding: 0;
+    }
+
+    .rename-btn {
+        color: darkblue;
+        text-decoration: underline;
+        cursor: pointer;
+        font-size: 0.9rem;
+        background: none;
+        border: none;
+        padding: 0;
+    }
+
+</style>
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<div id="document-display-grid"> 
+    @foreach (var item in Model)
+    {
+        <div class="document-card">
+            <a asp-action="Details" asp-route-poolId="@item.poolId" class="stretched-link"></a>
+            <span>@item.poolName</span>
+            <div class="card-actions">
+    <a class="delete-btn" asp-action="Delete" asp-route-poolId="@item.poolId">Delete</a>
+</div>
+        </div>
+    }
+</div>
+
+

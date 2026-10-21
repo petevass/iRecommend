@@ -1,0 +1,72 @@
+@model iRecommendWeb.Models.RecLetterRequest
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>RecLetterRequest</h4>
+
+<form asp-action="Edit" asp-route-letterid="@Model.letterId">
+    <input type="hidden" asp-for="letterId" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div id="document-display-grid">
+
+        <div class="custom-card">
+            <h6>College Name:</h6>
+            <input asp-for="college" class="form-control" />
+            <span asp-validation-for="college" class="text-danger"></span>
+
+            <h6>Submission Method:</h6>
+            <select asp-for="method" class="form-control"
+                    asp-items="Html.GetEnumSelectList<SubmitMethod>()"></select>
+            <span asp-validation-for="method" class="text-danger"></span>
+        </div>
+
+        <div class="custom-card">
+            <h6>Submission Deadline:</h6>
+            <input asp-for="deadline" type="datetime-local" class="form-control" />
+            <span asp-validation-for="deadline" class="text-danger"></span>
+
+            <h6>Teacher's Current Progress</h6>
+            <p>@Model.currentProgress</p>
+        </div>
+
+        <div class="custom-card" style="visibility:hidden;"></div>
+
+        <div class="custom-card span-2">
+            <h5>Details from the Student</h5>
+            <textarea asp-for="details" id="autoresizing"
+                      style="width:97%; box-sizing:border-box; resize:none; overflow-y:hidden"></textarea>
+            <span asp-validation-for="details" class="text-danger"></span>
+        </div>
+
+    </div>
+    <br />
+    <input value="Save" class="btn btn-primary"type="submit" />
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const textarea = document.getElementById('autoresizing');
+        if (!textarea) return;
+
+        function autoResize() {
+            textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight + 'px';
+        }
+
+        textarea.addEventListener('input', autoResize);
+        autoResize();
+    });
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,55 @@
+@model IEnumerable<iRecommendWeb.Models.RecLetterRequest>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+          
+            <th>
+                Teacher
+            </th>
+            <th>
+                Submission Method
+            </th>
+            <th>
+                Submission Deadline
+            </th>
+            <th>
+                Teacher's Current Progress
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.teacherId)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.method)
+            </td>
+           
+            <td>
+                @Html.DisplayFor(model => item.deadline)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.currentProgress)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-letterid="@item.letterId">Edit</a> |
+                <a asp-action="Details" asp-route-letterid="@item.letterId">Details</a> 
+                
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
